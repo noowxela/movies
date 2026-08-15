@@ -51,6 +51,26 @@ const LINKS = Object.freeze({
     HREF: '/my-lists',
     AS_PREFIX: ''
   },
+  FAVORITES: {
+    HREF: '/favorites',
+    AS_PREFIX: ''
+  },
+  WATCHLIST: {
+    HREF: '/watchlist',
+    AS_PREFIX: ''
+  },
+  TV: {
+    HREF: '/tv',
+    AS_PREFIX: ''
+  },
+  TV_GENRE: {
+    HREF: '/tv/genre',
+    AS_PREFIX: ''
+  },
+  TV_SHOW: {
+    HREF: '/tv/show',
+    AS_PREFIX: ''
+  },
   NOT_FOUND: {
     HREF: '/404',
     AS_PREFIX: ''

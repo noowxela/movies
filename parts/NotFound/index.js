@@ -1,4 +1,5 @@
 
+'use client';
 
 import PageWrapper from 'parts/PageWrapper';
 import TitleSection from './TitleSection';

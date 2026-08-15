@@ -1,5 +1,4 @@
-
-import Link from 'next/link';
+import Link from 'lib/legacy-link';
 import DotCircleIcon from 'public/assets/svgs/icons/dot-circle.svg';
 
 import withTheme from 'utils/hocs/withTheme';
@@ -12,6 +11,7 @@ const GenreLink = ({
 }) => (
   <>
     <Link
+      className='genre-link'
       href={{
         pathname: LINKS.GENRE.HREF,
         query: {
@@ -20,16 +20,14 @@ const GenreLink = ({
           [QUERY_PARAMS.PAGE]: 1
         }
       }}>
-      <a>
-        <DotCircleIcon
-          fill='currentColor'
-          width='1.25em'
-          style={{marginRight: '4px'}} />
-        {genre.name}
-      </a>
+      <DotCircleIcon
+        fill='currentColor'
+        width='1.25em'
+        style={{marginRight: '4px'}} />
+      {genre.name}
     </Link>
     <style jsx>{`
-      a {
+      :global(a.genre-link) {
         display: flex;
         align-items: center;
         padding: 0.5rem 0rem;
@@ -39,16 +37,16 @@ const GenreLink = ({
         font-weight: ${theme.typography.fontWeightBold};
         text-transform: uppercase;
       }
-    
-      a:not(:last-child) {
+
+      :global(a.genre-link):not(:last-child) {
         margin-right: 2rem;
       }
-    
-      a:hover {
+
+      :global(a.genre-link):hover {
         text-decoration: underline;
       }
-    
-      a:active {
+
+      :global(a.genre-link):active {
         transform: translateY(2px);
       }
     `}</style>

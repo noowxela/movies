@@ -12,7 +12,7 @@ const MovieList = ({
 }) => (
   <>
     <MoviesGridContainer theme={theme}>
-      {movies.results.map((movie, index) => (
+      {(movies.results || []).map((movie, index) => (
         <MovieListItem
           theme={theme}
           key={movie.id}

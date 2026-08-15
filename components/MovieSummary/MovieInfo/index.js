@@ -7,6 +7,8 @@ import TheGenresSection from './TheGenresSection';
 import TheSynopsisSection from './TheSynopsisSection';
 import TheCastSection from './TheCastSection';
 import MovieAdSection from './MovieAdSection';
+import WatchProviders from 'components/WatchProviders';
+import AccountMediaActions from 'components/AccountMediaActions';
 import SIZE_TYPES from 'utils/constants/size-types';
 import withTheme from 'utils/hocs/withTheme';
 
@@ -33,6 +35,10 @@ const MovieInfo = ({
       <TheSynopsisSection
         className='the-synopsis-section-bottom-margin'
         synopsis={movie.overview || 'There is no synopsis available...'} />
+      <WatchProviders watchProviders={movie['watch/providers']} />
+      <AccountMediaActions
+        mediaType={movie.media_type || 'movie'}
+        mediaId={movie.id} />
       <TheCastSection
         className='cast-section-bottom-margin'
         cast={movie.cast}
@@ -40,7 +46,7 @@ const MovieInfo = ({
       <MovieAdSection
         websiteUrl={movie.homepage}
         imdbId={movie.imdb_id}
-        videos={movie.videos.results} />
+        videos={movie.videos?.results || []} />
     </InfoWrapper>
     <style jsx>{`
       :global(.basic-section-bottom-margin) {

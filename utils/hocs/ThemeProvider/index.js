@@ -1,4 +1,4 @@
-
+'use client';
 
 import theme from 'styles/theme';
 import ThemeContext from 'contexts/theme-context';

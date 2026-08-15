@@ -14,7 +14,8 @@ const Toggle = ({
         type='checkbox'
         checked={checked}
         onChange={onChange}
-        id={`toggle-track-${id}`} />
+        id={`toggle-track-${id}`}
+        suppressHydrationWarning />
       <label
         style={{color: 'transparent'}}
         htmlFor={`toggle-track-${id}`}>

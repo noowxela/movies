@@ -1,6 +1,4 @@
 
-import LazyLoad from 'react-lazyload';
-
 import PosterLink from 'components/PosterLink';
 import Scenery from 'components/Scenery';
 import DetailsPanelWrapper from 'components/DetailsPanelWrapper';
@@ -20,38 +18,39 @@ const MovieListItem = ({
   movie,
   baseUrl,
   fetchpriority
-}) => (
+}) => {
+  const isTV = movie.media_type === 'tv' || (!movie.title && Boolean(movie.name));
+  const title = movie.title || movie.name;
+  const href = {
+    pathname: isTV ? LINKS.TV_SHOW.HREF : LINKS.MOVIE.HREF,
+    query: {
+      [QUERY_PARAMS.ID]: movie.id,
+      [QUERY_PARAMS.PAGE]: 1
+    }
+  };
+
+  return (
   <>
-    <LazyLoad
-      height={200}
-      offset={1400}>
-      <PosterLink
-        className={POSTER_LINK_CLASS_NAME}
-        href={{
-          pathname: LINKS.MOVIE.HREF,
-          query: {
-            [QUERY_PARAMS.ID]: movie.id,
-            [QUERY_PARAMS.PAGE]: 1
-          }
-        }}>
-        <Scenery
-          width={W342H513.WIDTH}
-          height={W342H513.HEIGHT}
-          fetchpriority={fetchpriority}
-          src={`${baseUrl}w${W342H513.WIDTH}${movie.poster_path}`} />
-        <DetailsPanelWrapper theme={theme}>
-          <PosterTitle
-            theme={theme}
-            className={POSTER_TITLE_CLASS_NAME}>
-            {movie.title}
-          </PosterTitle>
-          <RatingInfo
-            className={RATING_INFO_CLASS_NAME}
-            voteAverage={movie.vote_average}
-            tooltip={`${movie.vote_average} average rating on ${movie.vote_count} votes`} />
-        </DetailsPanelWrapper>
-      </PosterLink>
-    </LazyLoad>
+    <PosterLink
+      className={POSTER_LINK_CLASS_NAME}
+      href={href}>
+      <Scenery
+        width={W342H513.WIDTH}
+        height={W342H513.HEIGHT}
+        fetchpriority={fetchpriority}
+        src={movie.poster_path ? `${baseUrl}w${W342H513.WIDTH}${movie.poster_path}` : undefined} />
+      <DetailsPanelWrapper theme={theme}>
+        <PosterTitle
+          theme={theme}
+          className={POSTER_TITLE_CLASS_NAME}>
+          {title}
+        </PosterTitle>
+        <RatingInfo
+          className={RATING_INFO_CLASS_NAME}
+          voteAverage={movie.vote_average}
+          tooltip={`${movie.vote_average} average rating on ${movie.vote_count} votes`} />
+      </DetailsPanelWrapper>
+    </PosterLink>
     <style jsx>{`
       :global(.${POSTER_LINK_CLASS_NAME}:hover .${CLASS_NAMES.IMAGE_LOADING_PLACEHOLDER}) {
         box-shadow: ${theme.shadows[0]};
@@ -67,6 +66,7 @@ const MovieListItem = ({
       }
     `}</style>
   </>
-);
+  );
+};
 
 export default MovieListItem;

@@ -1,12 +1,13 @@
 
 
 import { useState, useRef } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import Form from './Form';
 import Input from './Input';
 import MagnifierButton from './MagnifierButton';
 import useClickAway from 'utils/hooks/useClickAway';
+import { buildUrl } from 'utils/hooks/useQueryRouter';
 import LINKS from 'utils/constants/links';
 import withTheme from 'utils/hocs/withTheme';
 import QUERY_PARAMS from 'utils/constants/query-params';
@@ -15,6 +16,7 @@ const SearchBar = ({
   id,
   theme
 }) => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [opened, setOpened] = useState(false);
   const formRef = useRef();
@@ -31,13 +33,13 @@ const SearchBar = ({
     // TODO: block for now as it breaks the smooth decreasing of the input
     // setSearchTerm('');
     setOpened(false);
-    Router.push({
+    router.push(buildUrl({
       pathname: LINKS.SEARCH.HREF,
       query: {
         [QUERY_PARAMS.SEARCH_TERM]: searchTerm,
         [QUERY_PARAMS.PAGE]: 1
       }
-    });
+    }, LINKS.SEARCH.HREF));
   };
 
   const onFormClickHandler = () => {

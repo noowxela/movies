@@ -7,27 +7,40 @@ import {
   TMDB_API_READ_ACCESS_TOKEN
 } from 'config/tmdb';
 
-/**
- * TODO:
- * RE: https://developers.themoviedb.org/4/getting-started
- * Do however, encourage you to use the new `Authorization` header for all requests since it's a system you have to use for all application and user requests besides `GET` regardless.
- * Could encounter such an issue as https://google-chrome.atlassian.net/browse/GOOGLE-89?focusedCommentId=10979.
- */
-
-const tmdbAPI = axios.create({
-  baseURL: TMDB_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json;charset=utf-8',
-    Authorization: `Bearer ${TMDB_API_READ_ACCESS_TOKEN}`
+const resolveUrl = path => {
+  const clean = String(path || '').replace(/^\//, '');
+  if (typeof window !== 'undefined') {
+    return `/api/tmdb/${clean}`;
   }
-});
+  return `${TMDB_API_BASE_URL}/${clean}`;
+};
 
-const alternativeTmdbAPI = axios.create({
-  baseURL: TMDB_API_BASE_URL,
-  params: {
-    api_key: TMDB_API_KEY,
-  }
-});
+const withClientConfig = (config = {}) => {
+  const isBrowser = typeof window !== 'undefined';
+  return {
+    ...config,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      ...(isBrowser || !TMDB_API_READ_ACCESS_TOKEN ? {} : {
+        Authorization: `Bearer ${TMDB_API_READ_ACCESS_TOKEN}`
+      }),
+      ...(config.headers || {})
+    },
+    params: {
+      ...(isBrowser || !TMDB_API_KEY ? {} : { api_key: TMDB_API_KEY }),
+      ...(config.params || {})
+    }
+  };
+};
+
+const tmdbAPI = {
+  get: (url, config) => axios.get(resolveUrl(url), withClientConfig(config)),
+  post: (url, body, config) => axios.post(resolveUrl(url), body, withClientConfig(config)),
+  put: (url, body, config) => axios.put(resolveUrl(url), body, withClientConfig(config)),
+  delete: (url, config) => axios.delete(resolveUrl(url), withClientConfig(config))
+};
+
+const alternativeTmdbAPI = tmdbAPI;
 
 export {
   alternativeTmdbAPI

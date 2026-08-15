@@ -3,6 +3,7 @@
 // Get the basic cfg obj from API and Genres for the sidebar
 const FETCH_CONFIG = 'FETCH_CONFIG';
 const FETCH_GENRES = 'FETCH_GENRES';
+const FETCH_TV_GENRES = 'FETCH_TV_GENRES';
 
 // Set the selected menu item name on sidebar
 const SET_SELECTED_MENU_ITEM_NAME = 'SET_SELECTED_MENU_ITEM_NAME';
@@ -50,6 +51,7 @@ const CLEAR_ERROR = 'CLEAR_ERROR';
 export {
   FETCH_CONFIG,
   FETCH_GENRES,
+  FETCH_TV_GENRES,
   SET_SELECTED_MENU_ITEM_NAME,
   UNSET_SELECTED_MENU_ITEM_NAME,
   FETCH_MOVIE,

@@ -9,8 +9,8 @@ import TMDBMark from 'components/TMDBMark';
 import LINKS from 'utils/constants/links';
 import QUERY_PARAMS from 'utils/constants/query-params';
 
-const renderStaticCategories = (staticCategories, selectedMenuItemName, closeMenu = null) => {
-  const menuItemLinks = staticCategories.map(staticCategory => (
+const renderStaticCategories = (staticCategories, selectedMenuItemName, closeMenu = null) => (
+  staticCategories.map(staticCategory => (
     <MenuItemLink
       key={staticCategory.id}
       href={{
@@ -24,17 +24,33 @@ const renderStaticCategories = (staticCategories, selectedMenuItemName, closeMen
       selected={staticCategory.name === selectedMenuItemName}>
       <MenuItem title={staticCategory.name} />
     </MenuItemLink>
-  ));
+  ))
+);
 
-  return menuItemLinks;
-};
+const renderTVCategories = (staticCategories, selectedMenuItemName, closeMenu = null) => (
+  staticCategories.map(staticCategory => (
+    <MenuItemLink
+      key={staticCategory.id}
+      href={{
+        pathname: LINKS.TV.HREF,
+        query: {
+          [QUERY_PARAMS.CATEGORY]: staticCategory.name,
+          [QUERY_PARAMS.PAGE]: 1
+        }
+      }}
+      onClick={closeMenu}
+      selected={staticCategory.name === selectedMenuItemName}>
+      <MenuItem title={staticCategory.name} />
+    </MenuItemLink>
+  ))
+);
 
-const renderGenres = (genres, selectedMenuItemName, closeMenu = null) => {
-  const menuItemLinks = genres.map(genre => (
+const renderGenres = (genres, selectedMenuItemName, closeMenu = null, pathname = LINKS.GENRE.HREF) => (
+  genres.map(genre => (
     <MenuItemLink
       key={genre.id}
       href={{
-        pathname: LINKS.GENRE.HREF,
+        pathname,
         query: {
           [QUERY_PARAMS.ID]: genre.id,
           [QUERY_PARAMS.NAME]: genre.name,
@@ -45,10 +61,8 @@ const renderGenres = (genres, selectedMenuItemName, closeMenu = null) => {
       selected={genre.name === selectedMenuItemName}>
       <MenuItem title={genre.name} />
     </MenuItemLink>
-  ));
-
-  return menuItemLinks;
-};
+  ))
+);
 
 const Menu = ({
   isMobile,
@@ -56,7 +70,9 @@ const Menu = ({
   ...rest
 }) => {
   const staticCategories = useSelector(state => state.general.staticCategories);
+  const staticTVCategories = useSelector(state => state.general.staticTVCategories);
   const genres = useSelector(state => state.general.genres);
+  const tvGenres = useSelector(state => state.general.tvGenres);
   const selectedMenuItemName = useSelector(state => state.general.selectedMenuItemName);
 
   return (
@@ -65,8 +81,12 @@ const Menu = ({
         {!isMobile && <Logo />}
         <SectionHeading>Discover</SectionHeading>
         {renderStaticCategories(staticCategories, selectedMenuItemName, closeMenu)}
+        <SectionHeading>TV</SectionHeading>
+        {renderTVCategories(staticTVCategories, selectedMenuItemName, closeMenu)}
         <SectionHeading>Genres</SectionHeading>
         {renderGenres(genres, selectedMenuItemName, closeMenu)}
+        <SectionHeading>TV Genres</SectionHeading>
+        {renderGenres(tvGenres, selectedMenuItemName, closeMenu, LINKS.TV_GENRE.HREF)}
         <TMDBMark className='tmdb-mark' />
       </nav>
       <style jsx>{`

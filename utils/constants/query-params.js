@@ -5,7 +5,11 @@ const QUERY_PARAMS = Object.freeze({
   NAME: 'name',
   ID: 'id',
   SEARCH_TERM: 'searchTerm',
-  LIST_ID: 'listId'
+  LIST_ID: 'listId',
+  SORT: 'sort',
+  YEAR: 'year',
+  RATING: 'rating',
+  PROVIDER: 'provider'
 });
 
 export default QUERY_PARAMS;

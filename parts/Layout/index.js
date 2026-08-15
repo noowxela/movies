@@ -1,6 +1,8 @@
+'use client';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { usePathname } from 'next/navigation';
 
 import Sidebar from 'containers/Sidebar';
 import AppHeader from 'containers/AppHeader';
@@ -18,42 +20,31 @@ const Layout = ({
   theme,
   children
 }) => {
-  // TODO: Client-side Rendering for now
-  // RE: https://nextjs.org/learn/basics/data-fetching/two-forms
-  // RE: https://nextjs.org/learn/basics/data-fetching/request-time
-  // RE: https://nextjs.org/docs/basic-features/data-fetching
   const dispatch = useDispatch();
+  const pathname = usePathname();
   useEffect(() => {
+    if (pathname === '/error') {
+      return;
+    }
     dispatch(init());
-  }, [dispatch]);
+  }, [dispatch, pathname]);
 
   return (
     <>
       <MyHead />
-      {/**
-       * TODO: it could be more efficient in using markups.
-       * children is duplicated -> looks like it affects the performance (a little).
-       * Could use SearchBar and DarkModeToggle just once by CSS tricks.
-       * If we updated the layout (similar to the one in the Material Music project) from a designing perspective we could avoid duplicating children.
-       */}
-      <MediaContextProvider>
-        <Media at='sm'>
-          <MainWrapper theme={theme}>
+      <MediaContextProvider disableDynamicMediaQueries>
+        <MainWrapper theme={theme}>
+          <Media at='sm'>
             <AppHeader />
-            <ContentWrapper theme={theme}>
-              {children}
-            </ContentWrapper>
-          </MainWrapper>
-        </Media>
-        <Media greaterThan='sm'>
-          <MainWrapper theme={theme}>
+          </Media>
+          <Media greaterThan='sm'>
             <Sidebar />
             <div className='desktop-widgets-container'>
               <SearchBar id='desktop' />
               <DarkModeToggle
                 id='desktop'
                 className='left-margin' />
-              {/* <TheUser /> */}
+              <TheUser />
             </div>
             <style jsx>{`
               .desktop-widgets-container {
@@ -69,11 +60,11 @@ const Layout = ({
                 margin-left: 12px;
               }
             `}</style>
-            <ContentWrapper theme={theme}>
-              {children}
-            </ContentWrapper>
-          </MainWrapper>
-        </Media>
+          </Media>
+          <ContentWrapper theme={theme}>
+            {children}
+          </ContentWrapper>
+        </MainWrapper>
       </MediaContextProvider>
     </>
   );

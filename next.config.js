@@ -1,24 +1,42 @@
-
+const path = require('path');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
 
-const withSourceMaps = require('@zeit/next-source-maps');
-const webpack = require('webpack');
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  outputFileTracingRoot: path.join(__dirname),
+  typescript: {
+    ignoreBuildErrors: true
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+        pathname: '/t/p/**'
+      }
+    ]
+  },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js'
+      }
+    }
+  }
+};
 
-module.exports = withBundleAnalyzer(withSourceMaps({
-  webpack: (config) => {
+if (process.env.ANALYZE === 'true') {
+  nextConfig.webpack = (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack']
     });
-
-    config.plugins.push(
-      new webpack.ProvidePlugin({
-        React: "react",
-      })
-    );
-
     return config;
-  }
-}));
+  };
+}
+
+module.exports = withBundleAnalyzer(nextConfig);

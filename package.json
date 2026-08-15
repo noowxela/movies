@@ -2,25 +2,27 @@
   "name": "movie-app",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "static-build": "next build && next export",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
+    "test:e2e": "playwright test",
     "vercel-deploy": "vercel --prod",
-    "netlify-deploy": "npm run static-build && netlify deploy --prod --dir=out",
-    "analyze": "cross-env ANALYZE=true next build",
-    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "analyze:server": "cross-env BUNDLE_ANALYZE=server next build --webpack",
+    "analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build --webpack"
   },
   "dependencies": {
     "@artsy/fresnel": "^1.2.0",
     "@loadable/component": "^5.13.1",
     "clsx": "^1.1.1",
-    "next": "^12.2.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "next": "^16.3.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-glider": "^2.0.1",
     "react-lazyload": "^3.0.0",
     "react-modal-video": "^1.2.3",
@@ -33,13 +35,17 @@
     "use-dark-mode": "^2.3.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^9.5.3",
+    "@next/bundle-analyzer": "^16.3.1",
+    "@playwright/test": "^1.47.0",
     "@svgr/webpack": "^5.4.0",
-    "@zeit/next-source-maps": "0.0.3",
+    "@types/node": "^20.14.10",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "cross-env": "^7.0.2",
-    "eslint": "^7.4.0",
-    "eslint-config-next": "^11.0.1",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.1",
     "redux-devtools-extension": "^2.13.8",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "typescript": "^5.5.4"
   }
 }
