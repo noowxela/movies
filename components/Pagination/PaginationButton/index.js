@@ -2,7 +2,7 @@
 
 import { scroller } from 'react-scroll';
 
-import { PAGINATION_BEHAVIOR_TYPES } from '../';
+import { PAGINATION_BEHAVIOR_TYPES } from '..';
 import LinkButton from 'components/LinkButton';
 import QUERY_PARAMS from 'utils/constants/query-params';
 import { SCROLL_TO_ELEMENT } from 'utils/constants';
