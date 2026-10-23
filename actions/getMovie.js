@@ -1,5 +1,5 @@
 
-import Router from 'next/router';
+import { redirectTo } from 'utils/hooks/useQueryRouter';
 
 import * as TYPES from './types';
 import tmdbAPI from 'services/tmdbAPI';
@@ -11,7 +11,7 @@ const getMovie = id => async dispatch => {
   try {
     dispatch({type: TYPES.SET_MOVIE_LOADING});
     const [response] = await Promise.all([
-      tmdbAPI.get(`/${TMDB_API_VERSION}/movie/${id}`, {params: {append_to_response: 'videos'}}),
+      tmdbAPI.get(`/${TMDB_API_VERSION}/movie/${id}`, {params: {append_to_response: 'videos,watch/providers'}}),
       dispatch(getCredits(id))
     ]);
     await dispatch({
@@ -22,7 +22,7 @@ const getMovie = id => async dispatch => {
   } catch (error) {
     console.log('[getMovie] error => ', error);
     dispatch({type: TYPES.INSERT_ERROR, payload: error.response});
-    Router.push(LINKS.ERROR.HREF);
+    redirectTo(LINKS.ERROR.HREF);
   }
 };
 

@@ -1,3 +1,4 @@
+'use client';
 
 import {
   useState,
@@ -10,6 +11,7 @@ import { TMDB_API_NEW_VERSION, TMDB_BASE_URL } from 'config/tmdb';
 import { loadState, saveState } from 'utils/helpers/localStorage';
 import STATUSES from 'utils/constants/statuses';
 import tmdbAPI from 'services/tmdbAPI';
+import { convertAccessTokenToSession } from 'services/account';
 
 
 const AuthProvider = ({ children }) => {
@@ -17,7 +19,8 @@ const AuthProvider = ({ children }) => {
     status: STATUSES.IDLE,
     error: null,
     accessToken: '',
-    accountId: ''
+    accountId: '',
+    sessionId: ''
   });
 
   useEffect(() => {
@@ -26,7 +29,8 @@ const AuthProvider = ({ children }) => {
         const {
           request_token: requestToken = '',
           access_token: initialAccessToken = '',
-          account_id: initialAccountId = ''
+          account_id: initialAccountId = '',
+          session_id: initialSessionId = ''
         } = loadState() || {};
 
         if (!requestToken && initialAccessToken && initialAccountId) {
@@ -34,7 +38,8 @@ const AuthProvider = ({ children }) => {
             status: STATUSES.RESOLVED,
             error: null,
             accessToken: initialAccessToken,
-            accountId: initialAccountId
+            accountId: initialAccountId,
+            sessionId: initialSessionId
           });
           return;
         };
@@ -50,17 +55,25 @@ const AuthProvider = ({ children }) => {
 
         const accessToken = accessTokenResults.access_token;
         const accountId = accessTokenResults.account_id;
+        let sessionId = '';
+        try {
+          sessionId = await convertAccessTokenToSession(accessToken) || '';
+        } catch (sessionError) {
+          sessionId = '';
+        }
         saveState({
           request_token: '',
           access_token: accessToken,
-          account_id: accountId
+          account_id: accountId,
+          session_id: sessionId
         });
 
         setState({
           status: STATUSES.RESOLVED,
           error: null,
           accessToken,
-          accountId
+          accountId,
+          sessionId
         });
       } catch (error) {
         console.log('[AuthProvider useEffect] error => ', error);
@@ -93,7 +106,8 @@ const AuthProvider = ({ children }) => {
       saveState({
         request_token: requestToken,
         access_token: '',
-        account_id: ''
+        account_id: '',
+        session_id: ''
       });
       window.location.replace(`${TMDB_BASE_URL}/auth/access?request_token=${requestToken}`);
     } catch (error) {
@@ -121,14 +135,16 @@ const AuthProvider = ({ children }) => {
       saveState({
         request_token: '',
         access_token: '',
-        account_id: ''
+        account_id: '',
+        session_id: ''
       });
 
       setState({
         status: STATUSES.RESOLVED,
         error: null,
         accessToken: '',
-        accountId: ''
+        accountId: '',
+        sessionId: ''
       });
     } catch (error) {
       console.log('[TheUser logout] error => ', error);
@@ -138,14 +154,16 @@ const AuthProvider = ({ children }) => {
         saveState({
           request_token: '',
           access_token: '',
-          account_id: ''
+          account_id: '',
+          session_id: ''
         });
 
         setState({
           status: STATUSES.IDLE,
           error: null,
           accessToken: '',
-          accountId: ''
+          accountId: '',
+          sessionId: ''
         });
         return;
       }

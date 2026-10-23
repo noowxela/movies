@@ -1,11 +1,19 @@
 
 # next-movies
 
-This is a Movies App built using Next.js, React and [The Movie Database (TMDB)](https://www.themoviedb.org/) API. 
+This is a Movies App built using Next.js, React and [The Movie Database (TMDB)](https://www.themoviedb.org/) API.
 
 ## Demo
 
-A [live deployment](https://xxx) of this app is available to try it out.
+Run the app locally after setup:
+
+```bash
+npm run dev
+```
+
+Then open [http://localhost:8080](http://localhost:8080).
+
+Set `NEXT_PUBLIC_SITE_URL` in `.env.local` to your deployed origin so Open Graph tags and share links use the correct host.
 
 ## Contributing
 
@@ -33,19 +41,24 @@ Clone and install the dependencies for `movies` locally:
 
 * `npm run dev`: dev build
 * `npm run build`: production build
-* `npm run static-build`: production static build
 * `npm run start`: start the project
+* `npm run lint`: lint the project
+* `npm run test:e2e`: Playwright smoke tests (first run `npx playwright install chromium`)
 * `npm run vercel-deploy`: deploy to vercel
-* `npm run netlify-deploy`: deploy to netlify 
-* `npm run analyze`: bundle analysis 
+* `npm run analyze`: bundle analysis
 * (`analyze:server` and `analyze:browser` are available too)
+
+GitHub Actions runs `npm run lint` and `npm run build` on every push and pull request, plus the Playwright smoke tests. Add `TMDB_API_KEY` and `TMDB_API_READ_ACCESS_TOKEN` as repository secrets so catalog pages and e2e can call TMDB.
 
 ## Tech Stack
 
 Built with:
 
-* Next.js
-* Redux and Redux Thunk
+* Next.js App Router
+* TypeScript (incremental, `allowJs`)
+* React 18
+* Redux and Redux Thunk (sidebar/config)
+* TMDB proxy via Route Handlers
 * react-glider
 * react-lazyload
 * react-modal-video
@@ -56,11 +69,10 @@ Built with:
 * @artsy/fresnel
 * @loadable/component
 
-## next/image
+## Images
 
-In most cases, we strongly recommend using the [next/image](https://nextjs.org/docs/api-reference/next/image) component for optimizing how you load images. For the next-movies app, there are a few app-specific reasons we currently don't use the component. Using `react-lazyload`, we lazy-load the entire `MovieListItem` component (for example), where elements like the movie name and star ratings don't load until they get near the viewport. This behavior is currently not possible with next/image. In the future, there may be more "Suspense"-y ways of approaching images in React/Next, which would make this type of pattern more first-class. Until then, check out our approach, but you'll likely be otherwise be able to make next/image work for you.
-  
-  
+Posters and artwork use [`next/image`](https://nextjs.org/docs/pages/building-your-application/optimizing/images) with TMDB remote patterns. SVG placeholders still use a native `img` because Next.js does not optimize SVGs by default.
+
 ## Authors
 
 - [@noowxela](https://github.com/noowxela)

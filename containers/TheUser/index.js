@@ -1,5 +1,5 @@
 
-import Link from 'next/link';
+import Link from 'lib/legacy-link';
 
 import TextButton from 'components/UI/TextButton';
 import DropdownMenu, { DropdownMenuItem } from 'components/UI/DropdownMenu';
@@ -42,7 +42,7 @@ const TheUser = ({
             <Link href={{
               pathname: LINKS.ADD_OR_EDIT_LIST.HREF
             }}>
-              <a>Create New List</a>
+              Create New List
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -52,7 +52,27 @@ const TheUser = ({
                 [QUERY_PARAMS.PAGE]: 1
               }
             }}>
-              <a>My Lists</a>
+              My Lists
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={{
+              pathname: LINKS.FAVORITES.HREF,
+              query: {
+                [QUERY_PARAMS.PAGE]: 1
+              }
+            }}>
+              Favorites
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={{
+              pathname: LINKS.WATCHLIST.HREF,
+              query: {
+                [QUERY_PARAMS.PAGE]: 1
+              }
+            }}>
+              Watchlist
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>

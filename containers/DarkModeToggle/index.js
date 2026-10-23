@@ -1,7 +1,7 @@
 
 
 // MEMO: inspired by https://web.dev/prefers-color-scheme/#the-lessdark-mode-togglegreater-custom-element
-import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import useDarkMode from 'use-dark-mode';
 
@@ -18,86 +18,38 @@ const DarkModeToggle = ({
     classNameDark: CLASS_NAMES.DARK,
     classNameLight: CLASS_NAMES.LIGHT
   });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) {
+      return;
+    }
+    const prefix = darkMode.value ? 'dark' : 'light';
+    const setHref = (selector, href) => {
+      const node = document.querySelector(selector);
+      if (node) {
+        node.setAttribute('href', href);
+      }
+    };
+
+    setHref('link[rel="apple-touch-icon"]', `/${prefix}-apple-touch-icon.png`);
+    setHref('link[rel="icon"][sizes="32x32"]', `/${prefix}-favicon-32x32.png`);
+    setHref('link[rel="icon"][sizes="16x16"]', `/${prefix}-favicon-16x16.png`);
+    setHref('link[rel="manifest"]', `/${prefix}-manifest.webmanifest`);
+    setHref('link[rel="mask-icon"]', `/${prefix}-safari-pinned-tab.svg`);
+
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) {
+      themeColor.setAttribute('content', darkMode.value ? '#fafafa' : '#303030');
+    }
+  }, [darkMode.value, mounted]);
 
   return (
     <>
-      <Head>
-        {darkMode.value ? (
-          <>
-            {/* TODO: block for now for toggle experience of the favicon depending on the light/dark mode */}
-            {/* <link
-              rel='icon'
-              href='/dark-favicon.ico' /> */}
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <link
-              rel='apple-touch-icon'
-              sizes='180x180'
-              href='/dark-apple-touch-icon.png' />
-            <link
-              rel='icon'
-              type='image/png'
-              sizes='32x32'
-              href='/dark-favicon-32x32.png' />
-            <link
-              rel='icon'
-              type='image/png'
-              sizes='16x16'
-              href='/dark-favicon-16x16.png' />
-            <link
-              rel='manifest'
-              href='/dark-manifest.webmanifest' />
-            <link
-              rel='mask-icon'
-              href='/dark-safari-pinned-tab.svg'
-              color='#5bbad5' />
-            <meta
-              name='msapplication-TileColor'
-              content='#da532c' />
-            {/* TODO: hardcoded */}
-            <meta name='theme-color' content='#fafafa' />
-            <meta
-              name='msapplication-config'
-              content='/dark-browserconfig.xml' />
-          </>
-        ) : (
-          <>
-            {/* TODO: block for now for toggle experience of the favicon depending on the light/dark mode */}
-            {/* <link
-              rel='icon'
-              href='/light-favicon.ico' /> */}
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <link
-              rel='apple-touch-icon'
-              sizes='180x180'
-              href='/light-apple-touch-icon.png' />
-            <link
-              rel='icon'
-              type='image/png'
-              sizes='32x32'
-              href='/light-favicon-32x32.png' />
-            <link
-              rel='icon'
-              type='image/png'
-              sizes='16x16'
-              href='/light-favicon-16x16.png' />
-            <link
-              rel='manifest'
-              href='/light-manifest.webmanifest' />
-            <link
-              rel='mask-icon'
-              href='/light-safari-pinned-tab.svg'
-              color='#5bbad5' />
-            <meta
-              name='msapplication-TileColor'
-              content='#da532c' />
-            {/* TODO: hardcoded */}
-            <meta name='theme-color' content='#303030' />
-            <meta
-              name='msapplication-config'
-              content='/light-browserconfig.xml' />
-          </>
-        )}
-      </Head>
       <div className={clsx('dark-mode-toggle', className)}>
         <button
           type='button'
@@ -106,7 +58,7 @@ const DarkModeToggle = ({
         </button>
         <Toggle
           id={id}
-          checked={darkMode.value}
+          checked={mounted ? darkMode.value : false}
           onChange={darkMode.toggle} />
         <button
           type='button'

@@ -1,4 +1,8 @@
 
+'use client';
+
+import { Suspense } from 'react';
+
 import PaginationWrapper from './PaginationWrapper';
 import PaginationButton from './PaginationButton';
 import CLASS_NAMES from 'utils/constants/class-names';
@@ -13,16 +17,18 @@ const Pagination = ({
   page,
   totalPages
 }) => (
-  <PaginationWrapper className={className}>
-    <PaginationButton
-      className={page > 1 ? CLASS_NAMES.VISIBLE : CLASS_NAMES.INVISIBLE}
-      page={page}
-      type={PAGINATION_BEHAVIOR_TYPES.PREV} />
-    <PaginationButton
-      className={page < totalPages ? CLASS_NAMES.VISIBLE : CLASS_NAMES.INVISIBLE}
-      page={page}
-      type={PAGINATION_BEHAVIOR_TYPES.NEXT} />
-  </PaginationWrapper>
+  <Suspense fallback={null}>
+    <PaginationWrapper className={className}>
+      <PaginationButton
+        className={page > 1 ? CLASS_NAMES.VISIBLE : CLASS_NAMES.INVISIBLE}
+        page={page}
+        type={PAGINATION_BEHAVIOR_TYPES.PREV} />
+      <PaginationButton
+        className={page < totalPages ? CLASS_NAMES.VISIBLE : CLASS_NAMES.INVISIBLE}
+        page={page}
+        type={PAGINATION_BEHAVIOR_TYPES.NEXT} />
+    </PaginationWrapper>
+  </Suspense>
 );
 
 export {

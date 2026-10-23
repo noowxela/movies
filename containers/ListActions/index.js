@@ -1,7 +1,7 @@
 
 
 import { useState } from 'react';
-import Link from 'next/link';
+import Link from 'lib/legacy-link';
 
 import Modal from 'components/UI/Modal';
 import Navbar, { NavbarItem } from 'components/UI/Navbar';
@@ -10,6 +10,7 @@ import TextInput from 'components/UI/TextInput';
 import { useAuth } from 'utils/hocs/AuthProvider';
 import LINKS from 'utils/constants/links';
 import QUERY_PARAMS from 'utils/constants/query-params';
+import { SITE_URL } from 'config/app-level';
 
 const ListActions = ({
   listId,
@@ -74,7 +75,7 @@ const ListActions = ({
             id='share-link'
             label='URL'
             defaultValue={
-              `${typeof location !== 'undefined' ? location.origin : ''}/list?${[QUERY_PARAMS.ID]}=${listId}&${[QUERY_PARAMS.PAGE]}=${page}`
+              `${SITE_URL}/list?${QUERY_PARAMS.ID}=${listId}&${QUERY_PARAMS.PAGE}=${page}`
             }
             readOnly />
         } />
@@ -84,13 +85,10 @@ const ListActions = ({
             key={listAction.title}
             invisible={listAction.invisible}>
             {listAction.href ? (
-              <Link
-                href={listAction.href}>
-                <a>
-                  <TextButton style={{padding: 0}}>
-                    {listAction.title}
-                  </TextButton>
-                </a>
+              <Link href={listAction.href}>
+                <TextButton style={{padding: 0}}>
+                  {listAction.title}
+                </TextButton>
               </Link>
             ) : (
               <a>

@@ -1,5 +1,5 @@
 
-import Router from 'next/router';
+import { redirectTo } from 'utils/hooks/useQueryRouter';
 
 import * as TYPES from './types';
 import tmdbAPI from 'services/tmdbAPI';
@@ -18,7 +18,7 @@ const getPerson = id => async dispatch => {
   } catch (error) {
     console.log('[getPerson] error => ', error);
     dispatch({type: TYPES.INSERT_ERROR, payload: error.response});
-    Router.push(LINKS.ERROR.HREF);
+    redirectTo(LINKS.ERROR.HREF);
   }
 };
 

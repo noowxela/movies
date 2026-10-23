@@ -1,14 +1,14 @@
 
 
-import { useRouter } from 'next/router';
 import { scroller } from 'react-scroll';
 
-import { PAGINATION_BEHAVIOR_TYPES } from '../';
+import { PAGINATION_BEHAVIOR_TYPES } from '..';
 import LinkButton from 'components/LinkButton';
 import QUERY_PARAMS from 'utils/constants/query-params';
 import { SCROLL_TO_ELEMENT } from 'utils/constants';
 import ArrowLeftIcon from 'public/assets/svgs/icons/arrow-left.svg';
 import ArrowRightIcon from 'public/assets/svgs/icons/arrow-right.svg';
+import useQueryRouter from 'utils/hooks/useQueryRouter';
 
 const scrollTo = () => {
   scroller.scrollTo(SCROLL_TO_ELEMENT, {
@@ -23,7 +23,7 @@ const PaginationButton = ({
   page,
   ...rest
 }) => {
-  const router = useRouter();
+  const router = useQueryRouter();
   const pageOnButton = type === PAGINATION_BEHAVIOR_TYPES.NEXT ? (page + 1) : (page - 1);
 
   return (

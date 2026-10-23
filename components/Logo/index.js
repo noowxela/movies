@@ -1,6 +1,4 @@
-
-
-import Link from 'next/link';
+import Link from 'lib/legacy-link';
 
 import LINKS from 'utils/constants/links';
 import { LOGO_IMAGE_PATH } from 'utils/constants/image-paths';
@@ -10,6 +8,7 @@ import STATIC_MOVIE_CATEGORIES from 'utils/constants/static-movie-categories';
 const Logo = () => (
   <>
     <Link
+      className='logo-link'
       href={{
         pathname: LINKS.HOME.HREF,
         query: {
@@ -17,20 +16,18 @@ const Logo = () => (
           [QUERY_PARAMS.PAGE]: 1
         }
       }}>
-      <a>
-        <picture>
-          <source srcSet={LOGO_IMAGE_PATH} media='(min-width: 80em)' />
-          <img
-            className='logo-img'
-            width='150'
-            height='150'
-            src=''
-            alt='movie ticket' />
-        </picture>
-      </a>
+      <picture>
+        <source srcSet={LOGO_IMAGE_PATH} media='(min-width: 80em)' />
+        <img
+          className='logo-img'
+          width='150'
+          height='150'
+          src={LOGO_IMAGE_PATH}
+          alt='movie ticket' />
+      </picture>
     </Link>
     <style jsx>{`
-      a {
+      :global(a.logo-link) {
         width: 100%;
         height: 18rem;
         display: grid;

@@ -1,44 +1,42 @@
+import React from 'react';
+import clsx from 'clsx';
 
-import Link from 'next/link';
+import Link from 'lib/legacy-link';
 
 import withTheme from 'utils/hocs/withTheme';
 
 const PosterLink = React.forwardRef(({
   theme,
   href,
-  as,
   children,
+  className,
   ...rest
 }, ref) => (
   <>
     <Link
-      passHref
-      as={as}
-      href={href}>
-      <a
-        ref={ref}
-        {...rest}>
-        {children}
-      </a>
+      href={href}
+      ref={ref}
+      className={clsx('poster-link-root', className)}
+      {...rest}>
+      {children}
     </Link>
     <style jsx>{`
-      a {
+      :global(a.poster-link-root) {
         position: relative;
         display: flex;
         flex-direction: column;
         transition: transform ${theme.transitions.duration.shortest}ms ${theme.transitions.easing.easeInOut};
       }
-    
-      // TODO: could follow the practices for hover effect from https://web.dev/authors/addyosmani 
-      a:hover {
+
+      :global(a.poster-link-root):hover {
         transform: scale(1.03);
       }
 
-      a:hover::after {
+      :global(a.poster-link-root):hover::after {
         transform: scaleY(1);
       }
-    
-      a::after {
+
+      :global(a.poster-link-root)::after {
         content: '';
         position: absolute;
         z-index: -99;

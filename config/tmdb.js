@@ -1,9 +1,10 @@
 
-// TODO: use an environment variable like process.env.TMDB_API_KEY
-const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const firstEnv = (...values) => values.find(value => typeof value === 'string' && value.trim())?.replace(/^["']|["']$/g, '');
+
+const TMDB_API_KEY = firstEnv(process.env.TMDB_API_KEY, process.env.NEXT_PUBLIC_TMDB_API_KEY);
 const TMDB_API_VERSION = 3;
 const TMDB_API_NEW_VERSION = 4;
-const TMDB_API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN;
+const TMDB_API_READ_ACCESS_TOKEN = firstEnv(process.env.TMDB_API_READ_ACCESS_TOKEN, process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN);
 
 const TMDB_API_BASE_URL = 'https://api.themoviedb.org';
 const TMDB_BASE_URL = 'https://www.themoviedb.org';

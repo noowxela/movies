@@ -1,47 +1,28 @@
+'use client';
 
-
-import Image from 'components/Image';
-import LoadingSpinner from 'components/UI/LoadingSpinner';
 import { PROFILE_PLACEHOLDER_IMAGE_PATH } from 'utils/constants/image-paths';
 
-const PROFILE_WIDTH = 44;
-const PROFILE_HEIGHT = 44;
+const PROFILE_SIZE = 44;
 
 const Profile = ({ src, alt }) => (
   <>
-    <Image
-      src={src}
-      alt={alt}
-      width={`${PROFILE_WIDTH}px`}
-      height={`${PROFILE_HEIGHT}px`}
-      className="center-profile profile-border-radius"
-      loadingUI={
-        // MEMO: reserve space for preventing layout shifting
-        <div
-          style={{
-            width: `${PROFILE_WIDTH}px`,
-            height: `${PROFILE_HEIGHT}px`,
-          }}
-          className="loading-ui center-profile"
-        >
-          <LoadingSpinner />
-        </div>
-      }
-      placeholderPath={PROFILE_PLACEHOLDER_IMAGE_PATH}
-    />
+    <img
+      className='profile'
+      src={src || PROFILE_PLACEHOLDER_IMAGE_PATH}
+      alt={alt || ''}
+      width={PROFILE_SIZE}
+      height={PROFILE_SIZE}
+      onError={event => {
+        event.currentTarget.onerror = null;
+        event.currentTarget.src = PROFILE_PLACEHOLDER_IMAGE_PATH;
+      }} />
     <style jsx>{`
-      .loading-ui {
-        display: flex;
-        justify-cotent: center;
-        align-items: center;
-      }
-
-      :global(.center-profile) {
-        margin: 0 auto;
-      }
-
-      :global(.profile-border-radius) {
+      .profile {
+        display: block;
+        width: ${PROFILE_SIZE}px;
+        height: ${PROFILE_SIZE}px;
         border-radius: 50%;
+        object-fit: cover;
       }
     `}</style>
   </>

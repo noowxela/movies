@@ -1,13 +1,13 @@
 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Link from 'lib/legacy-link';
+import { usePathname } from 'next/navigation';
 
 import Navbar, { NavbarItem } from 'components/UI/Navbar';
 import LINKS from 'utils/constants/links';
 import QUERY_PARAMS from 'utils/constants/query-params';
 
 const ListNavigation = ({ listId }) => {
-  const { pathname } = useRouter();
+  const pathname = usePathname();
 
   const updateListLinks = [
     {
@@ -91,9 +91,8 @@ const ListNavigation = ({ listId }) => {
           key={listLink.title}
           disabled={listLink.disabled}
           selected={pathname === listLink.href.pathname}>
-          <Link
-            href={listLink.href}>
-            <a>{listLink.title}</a>
+          <Link href={listLink.href}>
+            {listLink.title}
           </Link>
         </NavbarItem>  
       ))}
